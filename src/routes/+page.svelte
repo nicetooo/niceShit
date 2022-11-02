@@ -21,6 +21,8 @@
 		call.on('stream', (userVideoStream) => {
 			console.log('get stream');
 			buttomVideo.srcObject = userVideoStream;
+			buttomVideo.playsInline = true;
+			buttomVideo.muted = true;
 			buttomVideo.addEventListener('loadedmetadata', () => {
 				buttomVideo.play();
 			});
@@ -46,6 +48,8 @@
 		call.on('stream', (userVideoStream: MediaStream) => {
 			console.log('get stream back');
 			buttomVideo.srcObject = userVideoStream;
+			buttomVideo.playsInline = true;
+			buttomVideo.muted = true;
 			buttomVideo.addEventListener('loadedmetadata', () => {
 				buttomVideo.play();
 			});
@@ -55,6 +59,8 @@
 	function addVideoStream(video: HTMLVideoElement, stream: MediaStream) {
 		video.srcObject = stream;
 		video.addEventListener('loadedmetadata', () => {
+			video.playsInline = true;
+			video.muted = true;
 			video.play();
 		});
 	}
@@ -69,6 +75,7 @@
 		buttomVideo.addEventListener('loadedmetadata', () => {
 			buttomVideo.play();
 		});
+		buttomVideo.playsInline = true;
 		buttomVideo.muted = true;
 	}
 
