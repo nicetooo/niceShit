@@ -1,81 +1,114 @@
-<script>
+<script lang="ts">
 	import { Peer } from 'peerjs';
 	import { onMount } from 'svelte';
+
+	$: streams = {};
+	let myVideo: HTMLVideoElement;
+	let myStream: any;
+	let myConnId: string;
+	let connId: string;
+	let buttomVideo: HTMLVideoElement;
+
 	const myPeer = new Peer();
-	const streams = {};
-	let myStream;
+	myPeer.on('open', (id) => {
+		myConnId = id;
+		console.log('conn.id', id);
+	});
 
-	onMount(() => {
-		console.log('the component has mounted');
-		const videoGrid = document.getElementById('video-grid');
-		const myVideo = document.getElementsByTagName('video')[0];
-		handleCall();
-		myVideo.muted = true;
-		// navigator.mediaDevices
-		// 	.getUserMedia({
-		// 		video: true,
-		// 		audio: true
-		// 	})
-		// 	.then((stream) => {
-		// 		debugger;
-		// 		myStream = stream;
-		// 		addVideoStream(myVideo, stream);
-		// 	});
-
-		var conn = myPeer.connect('another-peers-id');
-		// on open will be launch when you successfully connect to PeerServer
-		conn.on('open', function () {
-			// here you have conn.id
-			console.log('conn.id', conn.id);
-			conn.send('hi!');
-		});
-
-		myPeer.on('connection', function (conn) {
-			conn.on('data', function (data) {
-				// Will print 'hi!'
-				console.log(data);
+	myPeer.on('call', (call) => {
+		console.log('get call');
+		call.answer(myStream);
+		call.on('stream', (userVideoStream) => {
+			console.log('get stream');
+			buttomVideo.srcObject = userVideoStream;
+			buttomVideo.addEventListener('loadedmetadata', () => {
+				buttomVideo.play();
 			});
 		});
 	});
 
-	function handleCall() {
-		myPeer.on('call', (call) => {
-			console.log({ call });
-			call.answer(myStream);
-			// const video = document.createElement('video');
-			call.on('stream', (userVideoStream) => {
-				console.log({ userVideoStream });
-				// addVideoStream(video, userVideoStream);
+	onMount(() => {
+		console.log('the component has mounted');
+		myVideo.muted = true;
+		navigator.mediaDevices
+			.getUserMedia({
+				video: true,
+				audio: true
+			})
+			.then((stream) => {
+				myStream = stream;
+				addVideoStream(myVideo, stream);
+			});
+	});
+
+	function RTCVideoCall() {
+		const call = myPeer.call(connId, myStream);
+		call.on('stream', (userVideoStream: MediaStream) => {
+			console.log('get stream back');
+			buttomVideo.srcObject = userVideoStream;
+			buttomVideo.addEventListener('loadedmetadata', () => {
+				buttomVideo.play();
 			});
 		});
 	}
 
-	function addVideoStream(video, stream) {
+	function addVideoStream(video: HTMLVideoElement, stream: MediaStream) {
 		video.srcObject = stream;
 		video.addEventListener('loadedmetadata', () => {
 			video.play();
 		});
+	}
+
+	function switchVideoSrcObject() {
+		const topSrc = myVideo.srcObject;
+		myVideo.srcObject = buttomVideo.srcObject;
+		buttomVideo.srcObject = topSrc;
+		myVideo.addEventListener('loadedmetadata', () => {
+			myVideo.play();
+		});
+		buttomVideo.addEventListener('loadedmetadata', () => {
+			buttomVideo.play();
+		});
+		buttomVideo.muted = true;
+	}
+
+	function copyConnId() {
+		navigator.clipboard.writeText(myConnId);
 	}
 </script>
 
 <svelte:head>
 	<title>nice shit</title>
 </svelte:head>
-<h1>Welcome to nice shit</h1>
-<div id="video-grid">
-	<video src="" />
+<video class="video top" bind:this={myVideo} src="" on:click={switchVideoSrcObject} />
+<video class="video" bind:this={buttomVideo} src="" />
+
+<div class="call">
+	<h4 on:click={copyConnId}>connection id: {myConnId}</h4>
+	<input placeholder="connection to" type="text" bind:value={connId} />
+	<button on:click={RTCVideoCall}> call </button>
 </div>
 
 <style>
-	#video-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, 300px);
-		grid-auto-rows: 300px;
+	.call {
+		position: fixed;
+		bottom: 0;
 	}
 
-	video {
-		width: 100%;
-		height: 100%;
+	.video {
+		width: 100vw;
+		height: 100vh;
 		object-fit: cover;
+		background-color: blue;
+	}
+
+	.top {
+		position: fixed;
+		right: 0;
+		width: 220px;
+		height: 320px;
+		object-fit: cover;
+		background-color: pink;
+		border-radius: 5px;
 	}
 </style>
