@@ -9,7 +9,12 @@
 	let connId: string;
 	let buttomVideo: HTMLVideoElement;
 
-	const myPeer = new Peer();
+	const myPeer = new Peer({
+		host: 'www.svelte.icu',
+		path: '/peer',
+		port: 3001
+	});
+
 	myPeer.on('open', (id) => {
 		myConnId = id;
 		console.log('conn.id', id);
