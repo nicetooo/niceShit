@@ -14,7 +14,6 @@
 		path: '/peer',
 		port: 3001
 	});
-
 	myPeer.on('open', (id) => {
 		myConnId = id;
 		console.log('conn.id', id);
