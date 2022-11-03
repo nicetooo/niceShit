@@ -12,7 +12,7 @@
 	const myPeer = new Peer({
 		host: 'www.svelte.icu',
 		path: '/peer',
-		port: 443
+		port: 3000
 	});
 	myPeer.on('open', (id) => {
 		myConnId = id;
