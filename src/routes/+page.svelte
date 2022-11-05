@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { Peer } from 'peerjs';
 	import { onMount } from 'svelte';
+	import { io, Socket } from 'socket.io-client';
+	import Video from '../components/Video.svelte';
 
 	const API_PATH = 'https://niceshit.up.railway.app';
 
-	let streams: any = {};
-	let myVideo: HTMLVideoElement;
-	let myStream: any;
+	let socket: Socket;
 	let myConnId: string;
-	let connId: string;
-	let myCode: string;
-	let buttomVideo: HTMLVideoElement;
-	let peers: string[] = [];
+	let myCode: string = '100';
+	let peers: Record<string, any> = {};
+	let myStream: MediaStream;
+
+	let streams: Record<string, MediaStream> = {};
 
 	const myPeer = new Peer({
 		secure: true
@@ -23,125 +24,36 @@
 	});
 
 	myPeer.on('call', (call) => {
-		console.log('get call');
 		call.answer(myStream);
+
 		call.on('stream', (userVideoStream) => {
-			console.log('get stream');
-			buttomVideo.srcObject = userVideoStream;
-			buttomVideo.addEventListener('loadedmetadata', () => {
-				buttomVideo.play();
-			});
+			streams[call.peer] = userVideoStream;
 		});
 	});
 
 	onMount(() => {
 		console.log('the component has mounted');
-		// navigator.mediaDevices
-		// 	.getUserMedia({
-		// 		video: true,
-		// 		audio: true
-		// 	})
-		// 	.then((stream) => {
-		// 		myStream = stream;
-		// 		addVideoStream(myVideo, stream);
-		// 	});
+
+		socket = io('wss://niceshit.up.railway.app');
+
+		socket.on('hello', (arg) => {
+			console.log(arg);
+		});
+
+		socket.on('user-connected', (peerId) => {
+			console.log('user-connected', peerId);
+			connectToNewUser(peerId);
+		});
+
+		socket.emit('howdy', 'stranger');
+
+		// socket.emit('join-room', 1, 2);
 	});
 
-	function RTCVideoCall(connId: string) {
-		const call = myPeer.call(connId, myStream);
-		call.on('stream', (userVideoStream: MediaStream) => {
-			console.log('get stream back');
-			buttomVideo.srcObject = userVideoStream;
-			buttomVideo.addEventListener('loadedmetadata', () => {
-				buttomVideo.play();
-			});
-		});
-
-		call.on('error', (error) => {
-			console.error('RTCVideoCall', error);
-			peers = peers.filter((p) => p !== connId);
-		});
-	}
-
-	function addVideoStream(video: HTMLVideoElement, stream: MediaStream) {
-		video.srcObject = stream;
-		video.addEventListener('loadedmetadata', () => {
-			video.playsInline = true;
-			video.muted = true;
-			video.play();
-		});
-	}
-
-	function switchVideoSrcObject() {
-		const topSrc = myVideo.srcObject;
-		myVideo.srcObject = buttomVideo.srcObject;
-		buttomVideo.srcObject = topSrc;
-		myVideo.addEventListener('loadedmetadata', () => {
-			myVideo.play();
-		});
-		buttomVideo.addEventListener('loadedmetadata', () => {
-			buttomVideo.play();
-		});
-		buttomVideo.playsInline = true;
-		buttomVideo.muted = true;
-	}
-
-	function copyConnId() {
-		navigator.clipboard.writeText(myConnId);
-	}
-
-	async function checkAllMember(members?: any) {
-		let membersList = members;
-		let hasEmptyPeerId = false;
-		if (!membersList) {
-			const res = await fetch(`${API_PATH}/member/`);
-			membersList = await res.json();
-		}
-		membersList.forEach((member: any) => {
-			const { peerId } = member;
-
-			if (!peerId) {
-				hasEmptyPeerId = true;
-			}
-
-			if (peerId && !peers.includes(peerId) && peerId !== myConnId) {
-				RTCVideoCall(peerId);
-				peers.push(peerId);
-			}
-		});
-
-		if (hasEmptyPeerId) {
-			setTimeout(checkAllMember, 5000);
-		}
-	}
-
-	async function checkCode() {
-		const res = await fetch(`${API_PATH}/member/${myCode}`);
-		const { error, code } = await res.json();
-		if (error) {
-			console.error('checkCode error', error);
-			return false;
-		}
-
-		if (code === myCode) {
-			console.log('checkCode pass');
-			return true;
-		}
-
-		return false;
-	}
-
-	async function joinRoom() {
-		const res = await fetch(`${API_PATH}/member/${myCode}/join/${myConnId}`, { method: 'PATCH' });
-		const data = await res.json();
-		console.log('join room, res', data);
-		checkAllMember(data);
-	}
-
-	async function handleJoin() {
-		if (myConnId && (await checkCode())) {
+	function handleJoin() {
+		if (myConnId && socket && myCode) {
 			console.log('joined');
-			joinRoom();
+			socket.emit('join-room', myCode, myConnId);
 			navigator.mediaDevices
 				.getUserMedia({
 					video: true,
@@ -149,25 +61,32 @@
 				})
 				.then((stream) => {
 					myStream = stream;
-					addVideoStream(myVideo, stream);
+					streams[myConnId] = stream;
 				});
 		}
+	}
+
+	function connectToNewUser(userId: string) {
+		const call = myPeer.call(userId, myStream);
+		call.on('stream', (userVideoStream) => {
+			console.log('on stream ', userId);
+			streams[userId] = userVideoStream;
+		});
+		call.on('close', () => {
+			delete streams[userId];
+		});
+
+		peers[userId] = call;
 	}
 </script>
 
 <svelte:head>
 	<title>nice shit</title>
 </svelte:head>
-<video
-	class="video top"
-	bind:this={myVideo}
-	src=""
-	on:click={switchVideoSrcObject}
-	autoplay
-	playsinline
-	muted
-/>
-<video class="video" bind:this={buttomVideo} src="" autoplay playsinline muted />
+
+{#each Object.keys(streams) as userId}
+	<Video srcObject={streams[userId]} />
+{/each}
 
 <div class="call">
 	<input placeholder="code" type="text" bind:value={myCode} />
