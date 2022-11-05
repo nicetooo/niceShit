@@ -192,8 +192,7 @@
 		right: 0;
 		width: 220px;
 		height: 320px;
-		object-fit: cover;
-		background-color: pink;
+		background-color: black;
 		border-radius: 5px;
 	}
 </style>
