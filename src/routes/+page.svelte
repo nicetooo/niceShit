@@ -2,6 +2,8 @@
 	import { Peer } from 'peerjs';
 	import { onMount } from 'svelte';
 
+	const API_PATH = 'https://niceshit.up.railway.app';
+
 	$: streams = {};
 	let myVideo: HTMLVideoElement;
 	let myStream: any;
@@ -12,7 +14,7 @@
 	const myPeer = new Peer({
 		secure: true,
 	});
-	
+
 	myPeer.on('open', (id) => {
 		myConnId = id;
 		console.log('conn.id', id);
@@ -33,6 +35,7 @@
 	});
 
 	onMount(() => {
+		getAllMember();
 		console.log('the component has mounted');
 		myVideo.muted = true;
 		navigator.mediaDevices
@@ -85,13 +88,19 @@
 	function copyConnId() {
 		navigator.clipboard.writeText(myConnId);
 	}
+
+	async function getAllMember() {
+		const res = await fetch(`${API_PATH}/member/`, {mode: 'cors'});
+		const data = await res.json();
+		console.log({ data });
+	}
 </script>
 
 <svelte:head>
 	<title>nice shit</title>
 </svelte:head>
-<video class="video top" bind:this={myVideo} src="" on:click={switchVideoSrcObject} />
-<video class="video" bind:this={buttomVideo} src="" />
+<video class="video top" bind:this={myVideo} src="" on:click={switchVideoSrcObject} autoplay playsinline/>
+<video class="video" bind:this={buttomVideo} src="" autoplay playsinline />
 
 <div class="call">
 	<h4 on:click={copyConnId}>connection id: {myConnId}</h4>
@@ -106,10 +115,10 @@
 	}
 
 	.video {
-		width: 100vw;
+		width: 100%;
 		height: 100vh;
-		object-fit: cover;
-		background-color: blue;
+		object-fit: contain;
+		background-color: black;
 	}
 
 	.top {
