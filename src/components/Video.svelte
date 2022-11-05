@@ -10,3 +10,9 @@
 </script>
 
 <video src="" bind:this={video} playsinline autoplay muted />
+
+<style>
+	video {
+		object-fit: contain;
+	}
+</style>

@@ -3,12 +3,16 @@
 	import { onMount } from 'svelte';
 	import { io, Socket } from 'socket.io-client';
 	import Video from '../components/Video.svelte';
+	import Call from '../components/Call.svelte';
 
 	const API_PATH = 'https://niceshit.up.railway.app';
 
+	import { writable } from 'svelte/store';
+
+	const myCode = writable('');
+
 	let socket: Socket;
 	let myConnId: string;
-	let myCode: string = '100';
 	let peers: Record<string, any> = {};
 	let myStream: MediaStream;
 
@@ -24,17 +28,21 @@
 	});
 
 	myPeer.on('call', (call) => {
+		if (streams[call.peer]) return;
 		call.answer(myStream);
 
 		call.on('stream', (userVideoStream) => {
 			streams[call.peer] = userVideoStream;
 		});
+
+		peers[call.peer] = call;
 	});
 
 	onMount(() => {
 		console.log('the component has mounted');
 
 		socket = io('wss://niceshit.up.railway.app');
+		// socket = io('ws://localhost:3333');
 
 		socket.on('hello', (arg) => {
 			console.log(arg);
@@ -51,9 +59,9 @@
 	});
 
 	function handleJoin() {
-		if (myConnId && socket && myCode) {
+		if (myConnId && socket && $myCode) {
 			console.log('joined');
-			socket.emit('join-room', myCode, myConnId);
+			socket.emit('join-room', $myCode, myConnId);
 			navigator.mediaDevices
 				.getUserMedia({
 					video: true,
@@ -67,6 +75,7 @@
 	}
 
 	function connectToNewUser(userId: string) {
+		if (peers[userId]) return;
 		const call = myPeer.call(userId, myStream);
 		call.on('stream', (userVideoStream) => {
 			console.log('on stream ', userId);
@@ -84,34 +93,29 @@
 	<title>nice shit</title>
 </svelte:head>
 
-{#each Object.keys(streams) as userId}
-	<Video srcObject={streams[userId]} />
-{/each}
+<div id="app">
+	{#each Object.keys(streams) as userId}
+		<Video srcObject={streams[userId]} />
+	{/each}
 
-<div class="call">
-	<input placeholder="code" type="text" bind:value={myCode} />
-	<button on:click={handleJoin}> call </button>
+	<Call onJoinClick={handleJoin} code={myCode} connId={myConnId} />
 </div>
 
 <style>
-	.call {
-		position: fixed;
-		bottom: 0;
+	#app {
+		display: flex;
+		/* flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
+		width: 100vw;
+		height: 100vh; */
 	}
-
-	.video {
-		width: 100%;
+	:global(body) {
+		width: 100vw;
 		height: 100vh;
-		object-fit: contain;
-		background-color: black;
-	}
-
-	.top {
-		position: fixed;
-		right: 0;
-		width: 220px;
-		height: 320px;
-		background-color: black;
-		border-radius: 5px;
+		padding: 0;
+		margin: 0;
+		box-sizing: border-box;
+		font-size: 20px;
 	}
 </style>
