@@ -54,13 +54,15 @@
 		}
 	}
 
-	function handleHangClick() {
+	async function handleHangClick() {
+		calling = true;
 		fullScreen = true;
 		disconnectMediaStream();
 		disconnectPeer();
 		disconnectSocket();
-		connectPeer();
-		connectSocket();
+		await connectPeer();
+		await connectSocket();
+		calling = false;
 	}
 
 	onMount(() => {
@@ -98,7 +100,7 @@
 			id="call-btn"
 			class:connReady
 			class={showBtn ? 'show' : 'hide'}
-			disabled={!isValid && fullScreen}
+			disabled={(!isValid && fullScreen) || calling}
 			on:click={handleJoinClick}
 		>
 			{#if calling}
