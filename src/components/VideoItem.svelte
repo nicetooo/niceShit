@@ -11,6 +11,10 @@
 	onMount(() => {
 		video.srcObject = srcObject;
 	});
+
+	$: {
+		if (video) video.srcObject = srcObject;
+	}
 	console.log(focus);
 </script>
 

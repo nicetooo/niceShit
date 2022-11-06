@@ -17,8 +17,18 @@
 	});
 
 	myPeer.on('call', (call) => {
+		console.log('on call', call.peer, $streams, $myStream);
 		if ($streams[call.peer]) return;
-		call.answer($myStream);
+
+		if ($myStream) {
+			call.answer($myStream);
+		} else {
+			myStream.subscribe((value) => {
+				if (value) {
+					call.answer($myStream);
+				}
+			});
+		}
 
 		call.on('stream', (userVideoStream) => {
 			handleUserStream(call.peer, userVideoStream);
@@ -46,8 +56,10 @@
 	}
 
 	function connectToNewUser(userId: string) {
+		console.log('on call', peers, userId);
 		if (peers[userId]) return;
 		const call = myPeer.call(userId, $myStream);
+		console.log('on call myPeer', peers, userId, call.peer);
 		call.on('stream', (userVideoStream) => {
 			console.log('on stream ', userId);
 			handleUserStream(userId, userVideoStream);

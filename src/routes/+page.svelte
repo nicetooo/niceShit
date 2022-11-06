@@ -23,8 +23,8 @@
 		height: 100%;
 	}
 	:global(body) {
-		width: 100vw;
-		height: calc(100vh - env(safe-area-inset-bottom));
+		width: 100%;
+		height: 100%;
 		padding: 0;
 		margin: 0;
 		box-sizing: border-box;

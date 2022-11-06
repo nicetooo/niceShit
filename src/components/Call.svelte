@@ -5,10 +5,10 @@
 	let disableBtn = !$myConnId || $myCode.length <= 7;
 	let fullScreen = true;
 
-	myCode.subscribe((value) => {
-		showBtn = !!$myConnId || value.length > 7;
+	$: {
+		showBtn = !!$myConnId || $myCode.length > 7;
 		disableBtn = !$myConnId || $myCode.length <= 7;
-	});
+	}
 
 	function handleJoinClick() {
 		fullScreen = false;
@@ -105,6 +105,11 @@
 		background-color: #444444;
 	}
 
+	button {
+		margin: 0;
+		padding: 0;
+	}
+
 	#input:focus {
 		outline: 3px solid #da0037;
 	}
@@ -117,6 +122,7 @@
 		background-color: #da0037;
 		border-radius: 6px;
 		margin-right: 12px;
+		padding: 6px;
 	}
 
 	#call-btn:disabled {
