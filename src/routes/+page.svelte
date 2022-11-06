@@ -16,7 +16,7 @@
 	#app {
 		display: flex;
 		justify-content: center;
-		align-items: center;
+		align-items: start;
 		width: 100%;
 		height: 100%;
 	}

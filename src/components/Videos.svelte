@@ -22,11 +22,7 @@
 
 <div class="videos" on:click={handleFocus}>
 	{#each userIds as userId, i}
-		<Video
-			srcObject={$streams[userId]}
-			focus={focusId === userId || userIds.length === 1}
-			{userId}
-		/>
+		<Video srcObject={$streams[userId]} focus={i === 0} {userId} />
 	{/each}
 </div>
 

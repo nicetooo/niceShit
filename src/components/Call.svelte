@@ -49,8 +49,6 @@
 		if (fullScreen) {
 			await initCall();
 			fullScreen = false;
-		} else {
-			await recall();
 		}
 	}
 
@@ -84,6 +82,32 @@
 		/></svg
 	>
 </button>
+<button id="recall-btn" disabled={calling} on:click={recall}>
+	{#if calling}
+		<svg
+			class:calling
+			id="Layer_1"
+			viewBox="0 0 24 24"
+			height="80%"
+			width="80%"
+			xmlns="http://www.w3.org/2000/svg"
+			data-name="Layer 1"
+			><path
+				d="m12 4a1 1 0 0 1 -1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1 -1 1zm1 19v-2a1 1 0 0 0 -2 0v2a1 1 0 0 0 2 0zm-9-11a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm20 0a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm-6.621-7.285 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .365 1.366.987.987 0 0 0 .5.135 1 1 0 0 0 .866-.501zm-10.03 17.3 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .364 1.366.989.989 0 0 0 .5.135 1 1 0 0 0 .867-.498zm-2.27-14.028a1 1 0 0 0 -.364-1.366l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a1 1 0 0 0 1.366-.365zm17.3 10.031a1 1 0 0 0 -.364-1.367l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a.987.987 0 0 0 .5.135 1 1 0 0 0 .867-.499zm-14.392-12.939a1 1 0 0 0 .365-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 .866.5.987.987 0 0 0 .5-.134zm10.031 17.3a1 1 0 0 0 .364-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 1.367.364zm2.269-14.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 1 1.731zm-17.3 10.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 .5 1.866.987.987 0 0 0 .497-.132z"
+			/></svg
+		>
+	{:else}
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="80%" width="80%"
+			><g id="_01_align_center" data-name="01 align center"
+				><path
+					d="M12,2a10.032,10.032,0,0,1,7.122,3H15V7h5.143A1.859,1.859,0,0,0,22,5.143V0H20V3.078A11.982,11.982,0,0,0,0,12H2A10.011,10.011,0,0,1,12,2Z"
+				/><path
+					d="M22,12A9.986,9.986,0,0,1,4.878,19H9V17H3.857A1.859,1.859,0,0,0,2,18.857V24H4V20.922A11.982,11.982,0,0,0,24,12Z"
+				/></g
+			></svg
+		>
+	{/if}
+</button>
 <div class={fullScreen ? 'full-screen' : 'bottom'}>
 	<div id="call">
 		{#if fullScreen}
@@ -115,16 +139,6 @@
 					><path
 						d="m12 4a1 1 0 0 1 -1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1 -1 1zm1 19v-2a1 1 0 0 0 -2 0v2a1 1 0 0 0 2 0zm-9-11a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm20 0a1 1 0 0 0 -1-1h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1zm-6.621-7.285 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .365 1.366.987.987 0 0 0 .5.135 1 1 0 0 0 .866-.501zm-10.03 17.3 1-1.731a1 1 0 0 0 -1.731-1l-1 1.731a1 1 0 0 0 .364 1.366.989.989 0 0 0 .5.135 1 1 0 0 0 .867-.498zm-2.27-14.028a1 1 0 0 0 -.364-1.366l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a1 1 0 0 0 1.366-.365zm17.3 10.031a1 1 0 0 0 -.364-1.367l-1.731-1a1 1 0 0 0 -1 1.731l1.731 1a.987.987 0 0 0 .5.135 1 1 0 0 0 .867-.499zm-14.392-12.939a1 1 0 0 0 .365-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 .866.5.987.987 0 0 0 .5-.134zm10.031 17.3a1 1 0 0 0 .364-1.366l-1-1.731a1 1 0 0 0 -1.731 1l1 1.731a1 1 0 0 0 1.367.364zm2.269-14.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 1 1.731zm-17.3 10.03 1.731-1a1 1 0 0 0 -1-1.731l-1.731 1a1 1 0 0 0 .5 1.866.987.987 0 0 0 .497-.132z"
 					/></svg
-				>
-			{:else if !fullScreen}
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="80%" width="80%"
-					><g id="_01_align_center" data-name="01 align center"
-						><path
-							d="M12,2a10.032,10.032,0,0,1,7.122,3H15V7h5.143A1.859,1.859,0,0,0,22,5.143V0H20V3.078A11.982,11.982,0,0,0,0,12H2A10.011,10.011,0,0,1,12,2Z"
-						/><path
-							d="M22,12A9.986,9.986,0,0,1,4.878,19H9V17H3.857A1.859,1.859,0,0,0,2,18.857V24H4V20.922A11.982,11.982,0,0,0,24,12Z"
-						/></g
-					></svg
 				>
 			{:else}
 				<svg
@@ -158,11 +172,7 @@
 	}
 
 	.bottom {
-		position: fixed;
-		bottom: 30px;
-		right: 30px;
-		width: 100px;
-		height: 40px;
+		display: none;
 	}
 
 	.hide {
@@ -227,13 +237,13 @@
 		padding: 10px;
 	}
 
-	.bottom #call-btn {
+	/* .bottom #call-btn {
 		position: fixed;
-		bottom: 30px;
-		right: 30px;
+		bottom: 10px;
+		right: 10px;
 		width: 100px;
 		height: 60px;
-	}
+	} */
 
 	#call-btn:disabled {
 		height: 4rem;
@@ -248,15 +258,29 @@
 
 	#hang-btn {
 		position: fixed;
-		bottom: 30px;
-		left: 30px;
-		width: 100px;
+		bottom: 10px;
+		left: 10px;
+		width: 60px;
 		height: 60px;
 		border: none;
 		color: var(--bg-color2);
 		background-color: var(--bg-decoration);
-		border-radius: 6px;
+		border-radius: 50%;
 		margin-left: 12px;
+		padding: 10px;
+	}
+
+	#recall-btn {
+		position: fixed;
+		bottom: 10px;
+		right: 10px;
+		width: 60px;
+		height: 60px;
+		border: none;
+		color: var(--bg-color2);
+		background-color: var(--bg-call);
+		border-radius: 50%;
+		margin-right: 12px;
 		padding: 10px;
 	}
 
