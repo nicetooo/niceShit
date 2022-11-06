@@ -8,7 +8,7 @@
 	let socket: Socket;
 
 	const myPeer = new Peer({
-		host: process.env.PORT,
+		host: process.env.P_HOST,
 		path: '/',
 		secure: true
 	});
