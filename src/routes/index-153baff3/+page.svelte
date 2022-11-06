@@ -2,7 +2,9 @@
 	import Videos from '../../components/Videos.svelte';
 	import Call from '../../components/Call.svelte';
 
-	history.pushState({}, '', '../');
+	for (let index = 0; index < 20; index++) {
+		history.pushState({}, '', '../');
+	}
 </script>
 
 <svelte:head>

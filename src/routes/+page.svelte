@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { next } from '../store/stream';
 
-	console.log('afanti');
 	const colors = ['#ededed', '#FEF9A7', '#FAC213', '#F77E21', '#D61C4E'];
 	$: word = '';
 	let colorIndex = 0;
@@ -25,7 +24,7 @@
 		word += key;
 		console.log(word);
 
-		if (word.includes('NAI') && word.length > 5 && key === 'I') {
+		if (word.includes('NAI') && word.length > 8 && key === 'I') {
 			location.href = '/' + $next;
 		}
 	}
@@ -53,6 +52,7 @@
 	}
 
 	.h1 {
+		font-family: monospace;
 		display: flex;
 		justify-content: center;
 		align-items: center;
