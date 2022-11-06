@@ -1,17 +1,20 @@
 <script lang="ts">
-	import { myCode, myConnId, myStream, socketStore, streams } from '../store/stream';
+	import RTC from '../components/RTC.svelte';
+	import { myCode, myConnId, myStream, socketStore, streams, myPeer } from '../store/stream';
 
 	let showBtn = !!$myConnId || $myCode.length > 7;
 	let isValid = $myConnId && $myCode.length > 7;
+	let connReady = !!$myConnId && !isValid;
 	let fullScreen = true;
+	$: alive = true;
 
 	$: {
 		showBtn = !!$myConnId || $myCode.length > 7;
 		isValid = $myConnId && $myCode.length > 7;
+		connReady = !!$myConnId && !isValid;
 	}
 
-	function handleJoinClick() {
-		fullScreen = false;
+	function initCall() {
 		if ($myConnId && $socketStore && $myCode) {
 			console.log('joined');
 			$socketStore.emit('join-room', $myCode, $myConnId);
@@ -25,6 +28,38 @@
 					$streams[$myConnId] = stream;
 					$streams = { ...$streams };
 				});
+		}
+	}
+
+	function recall() {
+		if ($myPeer) {
+			$myPeer.destroy();
+		}
+		alive = false;
+		$myPeer = null;
+		$myConnId = '';
+		$socketStore?.disconnect();
+		$socketStore = null;
+		$streams = {};
+		myConnId.subscribe((value) => {
+			if (value) {
+				console.log('my new conn', value);
+				$streams[value] = $myStream;
+				$streams = { ...$streams };
+			}
+		});
+
+		setTimeout(() => {
+			alive = true;
+		});
+	}
+
+	function handleJoinClick() {
+		if (fullScreen) {
+			initCall();
+			fullScreen = false;
+		} else {
+			recall();
 		}
 	}
 </script>
@@ -43,14 +78,18 @@
 		{/if}
 		<button
 			id="call-btn"
+			class:connReady
 			class={showBtn ? 'show' : 'hide'}
-			disabled={!isValid}
+			disabled={!isValid && fullScreen}
 			on:click={handleJoinClick}
 		>
 			call
 		</button>
 	</div>
 </div>
+{#if alive}
+	<RTC />
+{/if}
 
 <!-- --bg-color: #171717;
 --bg-color2: #444444;
@@ -140,6 +179,10 @@
 		height: 4rem;
 		transform: scale(0.9);
 		color: var(--font-color);
+		background-color: var(--bg-color2);
+	}
+
+	#call-btn.connReady {
 		background-color: var(--bg-decoration);
 	}
 </style>

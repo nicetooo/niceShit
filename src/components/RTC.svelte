@@ -1,26 +1,29 @@
 <script lang="ts">
 	import { Peer } from 'peerjs';
 	import { io, Socket } from 'socket.io-client';
-	import { onMount } from 'svelte';
-	import { myConnId, myStream, streams, socketStore } from '../store/stream';
+	import { onDestroy, onMount } from 'svelte';
+	import { myConnId, myStream, streams, socketStore, myPeer } from '../store/stream';
 
 	let peers: Record<string, any> = {};
 	let socket: Socket;
 
-	const myPeer = new Peer({
+	$myPeer = new Peer({
 		host: 'pppserver.up.railway.app',
 		path: '/',
 		secure: true
 	});
 
-	myPeer.on('open', (id) => {
+	$myPeer.on('open', (id) => {
 		myConnId.set(id);
 		console.log('conn.id', id);
 	});
 
-	myPeer.on('call', (call) => {
+	$myPeer.on('call', (call) => {
 		console.log('on call', call.peer, $streams, $myStream);
-		if ($streams[call.peer]) return;
+		if ($streams[call.peer]) {
+			delete $streams[call.peer];
+			$streams = { ...$streams };
+		}
 
 		if ($myStream) {
 			call.answer($myStream);
@@ -37,6 +40,14 @@
 		});
 
 		peers[call.peer] = call;
+	});
+
+	$myPeer.on('disconnected', function () {
+		console.log('my peer disconnected');
+	});
+
+	$myPeer.on('error', function (err) {
+		console.error('my peer on error', err);
 	});
 
 	function handleUserStream(userId: string, userVideoStream: MediaStream) {
@@ -59,8 +70,13 @@
 
 	function connectToNewUser(userId: string) {
 		console.log('on call', peers, userId);
-		if (peers[userId]) return;
-		const call = myPeer.call(userId, $myStream);
+		if (peers[userId]) {
+			peers[userId].close();
+		}
+		if (!$myPeer) {
+			return;
+		}
+		const call = $myPeer.call(userId, $myStream);
 		console.log('on call myPeer', peers, userId, call.peer);
 		call.on('stream', (userVideoStream) => {
 			console.log('on stream ', userId);
@@ -91,5 +107,9 @@
 		socket.emit('howdy', 'stranger');
 
 		$socketStore = socket;
+	});
+
+	onDestroy(() => {
+		console.log('the component is being destroyed');
 	});
 </script>

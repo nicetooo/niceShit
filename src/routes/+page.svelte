@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Videos from '../components/Videos.svelte';
 	import Call from '../components/Call.svelte';
-	import RTC from '../components/RTC.svelte';
 </script>
 
 <svelte:head>
@@ -11,7 +10,6 @@
 <div id="app">
 	<Videos />
 	<Call />
-	<RTC />
 </div>
 
 <style>
