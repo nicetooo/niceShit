@@ -1,29 +1,45 @@
 <script lang="ts">
-	import type { Writable } from 'svelte/store';
+	import { myCode, myConnId, myStream, socketStore, streams } from '../store/stream';
 
-	export let onJoinClick: () => void;
-	export let code: Writable<string>;
-	export let connId: string;
-
-	let showBtn = connId && $code.length > 7;
+	let showBtn = !!$myConnId || $myCode.length > 7;
+	let disableBtn = !$myConnId || $myCode.length <= 7;
 	let fullScreen = true;
 
-	code.subscribe((value) => {
-		showBtn = connId && value.length > 7;
+	myCode.subscribe((value) => {
+		showBtn = !!$myConnId || value.length > 7;
+		disableBtn = !$myConnId || $myCode.length <= 7;
 	});
 
 	function handleJoinClick() {
 		fullScreen = false;
-		onJoinClick();
+		if ($myConnId && $socketStore && $myCode) {
+			console.log('joined');
+			$socketStore.emit('join-room', $myCode, $myConnId);
+			navigator.mediaDevices
+				.getUserMedia({
+					video: true,
+					audio: true
+				})
+				.then((stream) => {
+					$myStream = stream;
+					$streams[$myConnId] = stream;
+					$streams = { ...$streams };
+				});
+		}
 	}
 </script>
 
 <div class={fullScreen ? 'full-screen' : 'bottom'}>
 	<div id="call">
 		{#if fullScreen}
-			<input id="input" placeholder="code" type="text" bind:value={$code} autocomplete="off" />
+			<input id="input" placeholder="code" type="text" bind:value={$myCode} autocomplete="off" />
 		{/if}
-		<button id="call-btn" class={showBtn ? 'show' : 'hide'} on:click={handleJoinClick}>
+		<button
+			id="call-btn"
+			class={showBtn ? 'show' : 'hide'}
+			disabled={disableBtn}
+			on:click={handleJoinClick}
+		>
 			call
 		</button>
 	</div>
@@ -51,9 +67,8 @@
 		position: fixed;
 		bottom: 30px;
 		right: 30px;
-		width: 90px;
-		height: 90px;
-		border-radius: 50%;
+		width: 30px;
+		height: 40px;
 	}
 
 	.hide {
@@ -70,7 +85,6 @@
 	#call {
 		font-family: monospace;
 		width: 100%;
-		height: 78px;
 		max-width: 550px;
 		display: flex;
 		flex-direction: row;
@@ -81,13 +95,13 @@
 
 	#input {
 		font-family: monospace;
-		height: 3rem;
+		width: 80%;
 		padding: 15px;
 		margin: 0 12px;
 		font-size: 2rem;
 		border-radius: 6px;
 		border: none;
-		color: #ededed;
+		color: var(--font-color);
 		background-color: #444444;
 	}
 
@@ -99,9 +113,15 @@
 		font-family: monospace;
 		font-size: 2rem;
 		border: none;
-		color: var(--bg-color);
+		color: var(--font-color);
 		background-color: #da0037;
 		border-radius: 6px;
 		margin-right: 12px;
+	}
+
+	#call-btn:disabled {
+		transform: scale(0.9);
+		color: var(--font-color);
+		background-color: #444444;
 	}
 </style>

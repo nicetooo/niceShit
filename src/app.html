@@ -3,12 +3,15 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="viewport"
+			content="width=device-width, height=device-height, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=none"
+		/>
 		%sveltekit.head%
 		<style>
 			#root {
-				width: 100%;
-				height: 100%;
+				width: 100vw;
+				height: 100vh;
 				background-color: var(--bg-color);
 			}
 			html {
