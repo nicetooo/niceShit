@@ -2,12 +2,12 @@
 	import { myCode, myConnId, myStream, socketStore, streams } from '../store/stream';
 
 	let showBtn = !!$myConnId || $myCode.length > 7;
-	let disableBtn = !$myConnId || $myCode.length <= 7;
+	let isValid = $myConnId && $myCode.length > 7;
 	let fullScreen = true;
 
 	$: {
 		showBtn = !!$myConnId || $myCode.length > 7;
-		disableBtn = !$myConnId || $myCode.length <= 7;
+		isValid = $myConnId && $myCode.length > 7;
 	}
 
 	function handleJoinClick() {
@@ -32,12 +32,19 @@
 <div class={fullScreen ? 'full-screen' : 'bottom'}>
 	<div id="call">
 		{#if fullScreen}
-			<input id="input" placeholder="code" type="text" bind:value={$myCode} autocomplete="off" />
+			<input
+				id="input"
+				class:isValid
+				placeholder="code"
+				type="text"
+				bind:value={$myCode}
+				autocomplete="off"
+			/>
 		{/if}
 		<button
 			id="call-btn"
 			class={showBtn ? 'show' : 'hide'}
-			disabled={disableBtn}
+			disabled={!isValid}
 			on:click={handleJoinClick}
 		>
 			call
@@ -114,12 +121,16 @@
 		outline: 3px solid #da0037;
 	}
 
+	.isValid#input:focus {
+		outline: 3px solid #82cd47;
+	}
+
 	#call-btn {
 		font-family: monospace;
 		font-size: 2rem;
 		border: none;
-		color: var(--font-color);
-		background-color: #da0037;
+		color: var(--bg-color2);
+		background-color: var(--bg-call);
 		border-radius: 6px;
 		margin-right: 12px;
 		padding: 6px;
@@ -129,6 +140,6 @@
 		height: 4rem;
 		transform: scale(0.9);
 		color: var(--font-color);
-		background-color: #444444;
+		background-color: var(--bg-decoration);
 	}
 </style>

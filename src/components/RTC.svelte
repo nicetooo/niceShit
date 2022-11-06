@@ -8,6 +8,8 @@
 	let socket: Socket;
 
 	const myPeer = new Peer({
+		host: process.env.PORT,
+		path: '/',
 		secure: true
 	});
 
