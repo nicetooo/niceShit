@@ -8,7 +8,7 @@
 	let socket: Socket;
 
 	const myPeer = new Peer({
-		host: process.env.P_HOST,
+		host: 'pppserver.up.railway.app',
 		path: '/',
 		secure: true
 	});
