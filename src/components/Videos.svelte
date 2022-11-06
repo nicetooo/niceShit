@@ -3,12 +3,20 @@
 	import { streams } from '../store/stream';
 
 	let focusId = '';
+	let userIds: string[] = [];
 
 	function handleFocus(e: any) {
 		focusId = e.target.id;
 	}
 
-	$: userIds = Object.keys($streams);
+	$: {
+		userIds = Object.keys($streams);
+		if (focusId) {
+			userIds.sort(function (x, y) {
+				return x === focusId ? -1 : y === focusId ? 1 : 0;
+			});
+		}
+	}
 	$: console.log({ userIds });
 </script>
 
@@ -16,8 +24,7 @@
 	{#each userIds as userId, i}
 		<Video
 			srcObject={$streams[userId]}
-			focus={focusId === `video-${i}` || userIds.length === 1}
-			id={`video-${i}`}
+			focus={focusId === userId || userIds.length === 1}
 			{userId}
 		/>
 	{/each}

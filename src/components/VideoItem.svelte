@@ -3,7 +3,6 @@
 	import { myConnId } from '../store/stream';
 
 	export let srcObject: MediaStream;
-	export let id: string;
 	export let focus = false;
 	export let userId = '';
 
@@ -16,7 +15,7 @@
 </script>
 
 <video
-	{id}
+	id={userId}
 	src=""
 	bind:this={video}
 	class:focus

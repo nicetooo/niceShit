@@ -120,6 +120,7 @@
 	}
 
 	#call-btn:disabled {
+		height: 4rem;
 		transform: scale(0.9);
 		color: var(--font-color);
 		background-color: #444444;
