@@ -5,13 +5,13 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta
 			name="viewport"
-			content="width=device-width, height=device-height, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=none"
+			content="width=device-width, height=device-height, minimum-scale=1, maximum-scale=1, initial-scale=1, user-scalable=0"
 		/>
 		%sveltekit.head%
 		<style>
 			#root {
 				width: 100vw;
-				height: 100vh;
+				height: calc(100vh - env(safe-area-inset-bottom));
 				background-color: var(--bg-color);
 			}
 			html {

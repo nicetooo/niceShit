@@ -24,7 +24,7 @@
 	}
 	:global(body) {
 		width: 100vw;
-		height: 100vh;
+		height: calc(100vh - env(safe-area-inset-bottom));
 		padding: 0;
 		margin: 0;
 		box-sizing: border-box;

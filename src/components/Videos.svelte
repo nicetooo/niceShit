@@ -32,6 +32,7 @@
 
 <style>
 	.videos {
+		width: 90vh;
 		display: flex;
 		justify-content: center;
 		align-items: center;
