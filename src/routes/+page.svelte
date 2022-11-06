@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { next } from '../store/stream';
+
 	console.log('afanti');
 	const colors = ['#ededed', '#FEF9A7', '#FAC213', '#F77E21', '#D61C4E'];
 	$: word = '';
@@ -24,7 +26,7 @@
 		console.log(word);
 
 		if (word.includes('NAI') && word.length > 5 && key === 'I') {
-			location.href = '/room';
+			location.href = '/' + $next;
 		}
 	}
 </script>
