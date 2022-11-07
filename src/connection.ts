@@ -85,7 +85,7 @@ export function handleUserStream(userId: string, userVideoStream: MediaStream) {
 export function connectSocket() {
 	return new Promise<void>((res, rej) => {
 		mySocket.update(() => {
-			const socket = io('wss://niceshit.up.railway.app');
+			const socket = io('wss://s.afanti.xyz');
 
 			socket.onAny((event) => {
 				console.log('socket.onAny', event);
