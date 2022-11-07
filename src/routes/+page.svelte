@@ -24,7 +24,7 @@
 		word += key;
 		console.log(word);
 
-		if (word.includes('NAI') && word.length > 8 && key === 'I') {
+		if (word.includes('FIFA') && word.length > 8 && key === 'I') {
 			location.href = '/' + $next;
 		}
 	}

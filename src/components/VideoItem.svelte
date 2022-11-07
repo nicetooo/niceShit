@@ -42,7 +42,12 @@
 	}
 
 	.focus {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 120px;
 		width: 100%;
-		max-height: 70vh;
+		height: 90vh;
 	}
 </style>

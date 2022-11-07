@@ -18,20 +18,26 @@
 		}
 	}
 	$: console.log({ userIds });
+
+	$: mainUid = userIds[0];
 </script>
 
+<Video srcObject={$streams[mainUid]} focus={true} userId={mainUid} />
 <div class="videos" on:click={handleFocus}>
 	{#each userIds as userId, i}
-		<Video srcObject={$streams[userId]} focus={i === 0} {userId} />
+		{#if i !== 0}
+			<Video srcObject={$streams[userId]} {userId} />
+		{/if}
 	{/each}
 </div>
 
 <style>
 	.videos {
-		width: 90vh;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		overflow: scroll;
 		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-wrap: wrap;
 	}
 </style>
