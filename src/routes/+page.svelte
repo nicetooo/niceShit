@@ -32,7 +32,7 @@
 </script>
 
 <svelte:head>
-	<title>afanti</title>
+	<title>AFANTI</title>
 </svelte:head>
 
 <div class="afanti" on:click={handleClick} style={`color: ${color}`}>
