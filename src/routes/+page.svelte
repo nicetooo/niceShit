@@ -52,6 +52,9 @@
 	}
 
 	.h1 {
+		cursor: default;
+		-webkit-user-select: none; /* Safari */
+		user-select: none;
 		font-family: monospace;
 		display: flex;
 		justify-content: center;
