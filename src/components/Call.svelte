@@ -8,7 +8,15 @@
 		getMyStream,
 		joinRoom
 	} from '../connection';
-	import { myCode, myConnId, myStream, mySocket, streams, myPeer } from '../store/stream';
+	import {
+		myCode,
+		myConnId,
+		myStream,
+		mySocket,
+		mySocketId,
+		streams,
+		myPeer
+	} from '../store/stream';
 	import { onMount } from 'svelte';
 
 	let showBtn = !!$myConnId || $myCode.length > 7;
@@ -20,7 +28,7 @@
 	$: {
 		showBtn = !!$myConnId || $myCode.length > 7;
 		isValid = $myConnId && $myCode.length > 7;
-		connReady = !!$myConnId && !isValid;
+		connReady = !!$myConnId && !!$mySocketId && !isValid;
 	}
 
 	async function initCall() {
@@ -61,10 +69,17 @@
 
 	async function initConnections() {
 		try {
+			calling = true;
 			await connectSocket();
 			await connectPeer();
+			calling = false;
 		} catch (err) {
 			console.error('connection error', err);
+
+			setTimeout(() => {
+				disconnectConns();
+				initConnections();
+			}, 5000);
 		}
 	}
 

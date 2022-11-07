@@ -1,7 +1,7 @@
 import { Peer } from 'peerjs';
 import { io, Socket } from 'socket.io-client';
 import { get, writable } from 'svelte/store';
-import { myCode, myConnId, myPeer, mySocket, myStream, streams } from './store/stream';
+import { myCode, myConnId, mySocketId, myPeer, mySocket, myStream, streams } from './store/stream';
 
 const peers: Record<string, any> = {};
 
@@ -93,6 +93,7 @@ export function connectSocket() {
 
 			socket.on('connect', () => {
 				res();
+				mySocketId.update(() => socket.id);
 				console.log('socket connected', socket.id);
 			});
 
@@ -180,6 +181,7 @@ export function disconnectSocket() {
 	$mySocket?.disconnect();
 	console.log('leave-room called');
 	mySocket.update(() => undefined);
+	mySocketId.update(() => '');
 }
 
 export function handleUserDisconnect(userId: string) {
