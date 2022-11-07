@@ -37,10 +37,8 @@
 
 	async function recall() {
 		calling = true;
-		disconnectPeer();
-		disconnectSocket();
-		await connectPeer();
-		await connectSocket();
+		disconnectConns();
+		await initConnections();
 		joinRoom();
 		calling = false;
 	}
@@ -56,16 +54,32 @@
 		calling = true;
 		fullScreen = true;
 		disconnectMediaStream();
-		disconnectPeer();
-		disconnectSocket();
-		await connectPeer();
-		await connectSocket();
+		disconnectConns();
+		await initConnections();
 		calling = false;
 	}
 
-	onMount(() => {
-		connectPeer();
-		connectSocket();
+	async function initConnections() {
+		try {
+			await connectSocket();
+			await connectPeer();
+		} catch (err) {
+			console.error('connection error', err);
+			disconnectConns();
+
+			setTimeout(() => {
+				initConnections();
+			}, 1000);
+		}
+	}
+
+	function disconnectConns() {
+		disconnectPeer();
+		disconnectSocket();
+	}
+
+	onMount(async () => {
+		await initConnections();
 	});
 </script>
 

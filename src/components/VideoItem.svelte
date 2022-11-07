@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { myConnId } from '../store/stream';
 
 	export let srcObject: MediaStream;
 	export let focus = false;
@@ -25,7 +24,7 @@
 	class:focus
 	playsinline
 	autoplay
-	muted={userId === $myConnId}
+	muted={userId === 'my-stream'}
 />
 
 <style>
