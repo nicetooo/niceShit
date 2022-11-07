@@ -65,11 +65,6 @@
 			await connectPeer();
 		} catch (err) {
 			console.error('connection error', err);
-			disconnectConns();
-
-			setTimeout(() => {
-				initConnections();
-			}, 1000);
 		}
 	}
 

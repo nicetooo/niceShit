@@ -15,6 +15,8 @@
 		if (video) video.srcObject = srcObject;
 	}
 	console.log(focus);
+
+	$: small = !focus;
 </script>
 
 <video
@@ -22,6 +24,8 @@
 	src=""
 	bind:this={video}
 	class:focus
+	class:small
+	style={`${small}`}
 	playsinline
 	autoplay
 	muted={userId === 'my-stream'}
@@ -29,11 +33,16 @@
 
 <style>
 	video {
-		width: 50%;
 		object-fit: contain;
+	}
+
+	.small {
+		width: 120px;
+		height: 190px;
 	}
 
 	.focus {
 		width: 100%;
+		max-height: 70vh;
 	}
 </style>
