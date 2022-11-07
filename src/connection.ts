@@ -9,7 +9,7 @@ export function connectPeer() {
 	return new Promise<void>((res, rej) => {
 		myPeer.update(() => {
 			const peer = new Peer({
-				host: 'pppserver.up.railway.app',
+				host: 'p.afanti.xyz',
 				path: '/',
 				secure: true
 			});
