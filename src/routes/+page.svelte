@@ -24,7 +24,8 @@
 		word += key;
 		console.log(word);
 
-		if (word.includes('FIFA') && word.length > 8 && key === 'I') {
+		if (key === 'I' && word[0] === 'N' && word.includes('FIFA') && word.length === 8) {
+			word = '';
 			location.href = '/' + $next;
 		}
 	}
