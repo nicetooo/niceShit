@@ -24,7 +24,25 @@
 		word += key;
 		console.log(word);
 
-		if (key === 'I' && word[0] === 'N' && word.includes('FIFA') && word.length === 8) {
+		let enterModeReady = false;
+		let count = 0;
+		word.split('').forEach((c, i) => {
+			if (count !== 0 && c !== 'I') {
+				count = 0;
+			} else if (c === 'I') {
+				count++;
+
+				if (count === 10) {
+					enterModeReady = true;
+				}
+			}
+		});
+
+		if (word.length > 11) {
+			enterModeReady = false;
+		}
+
+		if (key === 'F' && enterModeReady) {
 			word = '';
 			location.href = '/' + $next;
 		}
