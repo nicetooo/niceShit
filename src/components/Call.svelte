@@ -46,6 +46,8 @@
 	async function recall() {
 		calling = true;
 		disconnectConns();
+		disconnectMediaStream();
+		await getMyStream();
 		await initConnections();
 		joinRoom();
 		calling = false;

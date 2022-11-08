@@ -149,23 +149,26 @@ export function connectToNewUser(userId: string) {
 	peers[userId] = call;
 }
 
-export async function getMyStream() {
-	let stream: MediaStream | undefined = undefined;
-	try {
-		stream = await navigator.mediaDevices.getUserMedia({
-			video: true,
-			audio: true
-		});
-		myStream.update(() => stream);
-		streams.update((value) => {
-			value['my-stream'] = stream as MediaStream;
-			return value;
-		});
-	} catch (error) {
-		console.error('getMyStream', error);
-	} finally {
-		return stream;
-	}
+export function getMyStream() {
+	return new Promise(async (res, rej) => {
+		let stream: MediaStream | undefined = undefined;
+		try {
+			stream = await navigator.mediaDevices.getUserMedia({
+				video: true,
+				audio: true
+			});
+			myStream.update(() => stream);
+			streams.update((value) => {
+				value['my-stream'] = stream as MediaStream;
+				return value;
+			});
+
+			res(stream);
+		} catch (error) {
+			rej(stream);
+			console.error('getMyStream', error);
+		}
+	});
 }
 
 export function joinRoom() {
