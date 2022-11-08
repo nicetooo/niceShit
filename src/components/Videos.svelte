@@ -34,7 +34,7 @@
 <style>
 	.videos {
 		position: fixed;
-		top: 0;
+		bottom: 60px;
 		left: 0;
 		width: 100%;
 		overflow: scroll;
