@@ -32,13 +32,13 @@
 			} else if (c === 'I') {
 				count++;
 
-				if (count === 10) {
+				if (count === 8) {
 					enterModeReady = true;
 				}
 			}
 		});
 
-		if (word.length > 11) {
+		if (word.length > 9) {
 			enterModeReady = false;
 		}
 
