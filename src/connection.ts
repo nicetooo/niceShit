@@ -1,7 +1,16 @@
 import { Peer } from 'peerjs';
 import { io, Socket } from 'socket.io-client';
 import { get, writable } from 'svelte/store';
-import { myCode, myConnId, mySocketId, myPeer, mySocket, myStream, streams } from './store/stream';
+import {
+	myCode,
+	myConnId,
+	mySocketId,
+	myPeer,
+	mySocket,
+	myStream,
+	myScreen,
+	streams
+} from './store/stream';
 
 const peers: Record<string, any> = {};
 
@@ -169,6 +178,42 @@ export function getMyStream() {
 			console.error('getMyStream', error);
 		}
 	});
+}
+
+export async function shareScreen() {
+	try {
+		const $streams = get(streams);
+		const screenStream = await navigator.mediaDevices.getDisplayMedia({
+			audio: true,
+			video: true
+		});
+		console.log({ screenStream });
+		streams.update((ss) => {
+			ss['my-stream'] = screenStream;
+			return ss;
+		});
+		myScreen.set(screenStream);
+		const screenTrack = screenStream.getTracks()[0];
+		console.log({ peers });
+		// senders.current.find((sender) => sender.track.kind === 'video').replaceTrack(screenTrack);
+		for (const peerId in peers) {
+			if (Object.prototype.hasOwnProperty.call(peers, peerId)) {
+				const call = get(myPeer)?.call(peerId, screenStream);
+				peers[peerId] = call;
+			}
+		}
+		screenTrack.onended = function () {
+			for (const peerId in peers) {
+				if (Object.prototype.hasOwnProperty.call(peers, peerId)) {
+					const $myStream = get(myStream) as MediaStream;
+					const call = get(myPeer)?.call(peerId, $myStream);
+					peers[peerId] = call;
+				}
+			}
+		};
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 export function joinRoom() {

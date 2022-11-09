@@ -10,5 +10,6 @@ export const myConnId = writable('');
 export const mySocketId = writable('');
 export const myPeer = writable<Peer | undefined>();
 export const myStream = writable<MediaStream | undefined>();
+export const myScreen = writable<MediaStream | undefined>();
 export const mySocket = writable<Socket | undefined>();
 export const streams = writable<Record<string, MediaStream>>({});

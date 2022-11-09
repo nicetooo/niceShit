@@ -6,7 +6,8 @@
 		disconnectPeer,
 		disconnectSocket,
 		getMyStream,
-		joinRoom
+		joinRoom,
+		shareScreen
 	} from '../connection';
 	import {
 		myCode,
@@ -108,7 +109,7 @@
 		/></svg
 	>
 </button>
-<button id="recall-btn" disabled={calling} on:click={recall}>
+<button id="recall-btn" disabled={calling} on:click={shareScreen}>
 	{#if calling}
 		<svg
 			class:calling
