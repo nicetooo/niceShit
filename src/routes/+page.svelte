@@ -32,7 +32,7 @@
 			} else if (c === 'I') {
 				count++;
 
-				if (count === 60) {
+				if (count === 6) {
 					enterModeReady = true;
 				}
 			}
