@@ -3,9 +3,9 @@
 	import * as math from 'mathjs';
 	import { onMount } from 'svelte';
 
-	let expression = '0';
+	$: expression = '0';
 
-	async function calculate(e: any) {
+	function calculate(e: any) {
 		try {
 			const { attributes } = e.target;
 
