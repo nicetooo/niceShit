@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>AFANTI</title>
+	<title />
 </svelte:head>
 
 <div id="app">

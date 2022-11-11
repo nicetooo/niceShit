@@ -5,7 +5,7 @@ import { readable, writable } from 'svelte/store';
 //http://localhost:5173/index-153baff3
 
 export const next = readable('index-153baff3');
-export const myCode = writable('');
+export const myCode = writable('12341234');
 export const myConnId = writable('');
 export const mySocketId = writable('');
 export const myPeer = writable<Peer | undefined>();

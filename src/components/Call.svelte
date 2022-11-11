@@ -109,7 +109,7 @@
 		/></svg
 	>
 </button>
-<button id="recall-btn" disabled={calling} on:click={shareScreen}>
+<button id="recall-btn" disabled={calling} on:click={recall}>
 	{#if calling}
 		<svg
 			class:calling
