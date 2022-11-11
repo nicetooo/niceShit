@@ -5,7 +5,7 @@
 
 	let expression = '0';
 
-	function calculate(e: any) {
+	async function calculate(e: any) {
 		try {
 			const { attributes } = e.target;
 
@@ -172,6 +172,7 @@
 		color: white;
 		padding: 0 1rem;
 		padding-bottom: 20px;
+		overflow: hidden;
 	}
 
 	.pad {
