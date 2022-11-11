@@ -137,6 +137,7 @@
 		cursor: default;
 		-webkit-user-select: none; /* Safari */
 		user-select: none;
+		font-family: monospace;
 	}
 
 	.wrapper {
@@ -155,7 +156,7 @@
 		height: 100vh;
 		max-width: 400px;
 		position: fixed;
-		bottom: 0;
+		bottom: 30px;
 	}
 	.result {
 		display: flex;
@@ -166,10 +167,11 @@
 		font-size: calc(var(--width) * 0.24);
 		line-height: calc(var(--width) * 0.2);
 		width: 100%;
-		height: calc(100vh - var(--pad-height));
+		height: calc(100vh - var(--pad-height) - 10px);
 		background-color: #000;
 		color: white;
 		padding: 0 1rem;
+		padding-bottom: 20px;
 	}
 
 	.pad {
