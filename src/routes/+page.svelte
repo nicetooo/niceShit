@@ -190,15 +190,15 @@
 		justify-content: center;
 		align-items: center;
 		cursor: pointer;
-		width: calc(var(--width) * 0.21);
-		height: calc(var(--width) * 0.21);
-		margin: calc(var(--width) * 0.02);
+		width: calc(var(--width) * 0.2);
+		height: calc(var(--width) * 0.2);
+		margin: calc(var(--width) * 0.022);
 		border-radius: calc(calc(var(--width) * 0.21) / 2);
 		background-color: #505050;
 	}
 
 	.double {
-		width: calc(var(--width) * 0.38);
+		width: calc(var(--width) * 0.36);
 		justify-content: start;
 		padding-left: calc(var(--width) * 0.08);
 	}
