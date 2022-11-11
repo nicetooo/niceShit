@@ -23,6 +23,7 @@
 		align-items: center;
 		width: 100%;
 		height: 100%;
+		background-color: var(--bg-color);
 	}
 	:global(body) {
 		width: 100%;
@@ -31,5 +32,6 @@
 		margin: 0;
 		box-sizing: border-box;
 		font-size: 20px;
+		background-color: var(--bg-color);
 	}
 </style>

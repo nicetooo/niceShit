@@ -34,10 +34,10 @@
 <style>
 	.videos {
 		position: fixed;
-		bottom: 60px;
+		top: 0;
 		left: 0;
 		width: 100%;
-		overflow: scroll;
 		display: flex;
+		overflow-y: scroll;
 	}
 </style>

@@ -37,8 +37,8 @@
 	}
 
 	.small {
-		width: 120px;
-		height: 190px;
+		width: 150px;
+		height: 230px;
 	}
 
 	.focus {
@@ -47,6 +47,6 @@
 		left: 0;
 		right: 0;
 		width: 100%;
-		height: 80vh;
+		height: 100%;
 	}
 </style>
