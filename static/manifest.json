@@ -1,6 +1,6 @@
 {
-	"short_name": "CAL",
-	"name": "Calculator",
+	"short_name": "计算器",
+	"name": "计算器",
 	"start_url": "/",
 	"icons": [
 		{
