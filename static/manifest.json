@@ -1,10 +1,10 @@
 {
-	"short_name": "AFT",
-	"name": "AFANTI",
+	"short_name": "CAL",
+	"name": "Calculator",
 	"start_url": "/",
 	"icons": [
 		{
-			"src": "1024.png",
+			"src": "icons8-calculator-1024.png",
 			"type": "image/png",
 			"sizes": "1024x1024"
 		},
@@ -14,12 +14,12 @@
 			"sizes": "512x512"
 		},
 		{
-			"src": "256.png",
+			"src": "icons8-calculator-256.png",
 			"type": "image/png",
 			"sizes": "256x256"
 		},
 		{
-			"src": "icon_192.png",
+			"src": "icons8-calculator-192.png",
 			"type": "image/png",
 			"sizes": "192x192",
 			"purpose": "any maskable"
@@ -35,14 +35,14 @@
 			"short_name": "Today",
 			"description": "View weather information for today",
 			"url": "/today?source=pwa",
-			"icons": [{ "src": "icon_192.png", "sizes": "192x192" }]
+			"icons": [{ "src": "icons8-calculator-192.png", "sizes": "192x192" }]
 		},
 		{
 			"name": "How's weather tomorrow?",
 			"short_name": "Tomorrow",
 			"description": "View weather information for tomorrow",
 			"url": "/tomorrow?source=pwa",
-			"icons": [{ "src": "icon_192.png", "sizes": "192x192" }]
+			"icons": [{ "src": "icons8-calculator-192.png", "sizes": "192x192" }]
 		}
 	],
 	"description": "Lofi to lofi beats, while using the scratchpad to list down tasks and thoughts"
