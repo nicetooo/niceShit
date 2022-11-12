@@ -12,7 +12,7 @@ import {
 	streams
 } from './store/stream';
 
-const peers: Record<string, any> = {};
+let peers: Record<string, any> = {};
 
 export function connectPeer() {
 	return new Promise<void>((res, rej) => {
@@ -75,6 +75,7 @@ export function disconnectPeer() {
 	const $myPeer = get(myPeer);
 	$myPeer?.disconnect();
 	myConnId.update(() => '');
+	peers = {};
 }
 
 export function disconnectMediaStream() {
@@ -83,6 +84,9 @@ export function disconnectMediaStream() {
 		track.stop();
 	});
 	myStream.update(() => undefined);
+	streams.update(() => {
+		return {};
+	});
 }
 
 export function handleUserStream(userId: string, userVideoStream: MediaStream) {
