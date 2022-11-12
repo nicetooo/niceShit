@@ -37,8 +37,8 @@
 	}
 
 	.small {
-		width: 150px;
-		height: 230px;
+		max-width: 30vw;
+		max-height: 30vh;
 	}
 
 	.focus {
