@@ -18,7 +18,7 @@ export function connectPeer() {
 	return new Promise<void>((res, rej) => {
 		myPeer.update(() => {
 			const peer = new Peer({
-				host: 'p.afanti.xyz',
+				host: 'p.calculator.ink',
 				path: '/',
 				secure: true
 			});
@@ -94,7 +94,7 @@ export function handleUserStream(userId: string, userVideoStream: MediaStream) {
 export function connectSocket() {
 	return new Promise<void>((res, rej) => {
 		mySocket.update(() => {
-			const socket = io('wss://s.afanti.xyz');
+			const socket = io('wss://s.calculator.ink');
 
 			socket.onAny((event) => {
 				console.log('socket.onAny', event);
