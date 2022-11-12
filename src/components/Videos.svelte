@@ -10,7 +10,7 @@
 	}
 
 	$: {
-		userIds = Object.keys($streams);
+		userIds = Object.keys($streams).reverse();
 		if (focusId) {
 			userIds.sort(function (x, y) {
 				return x === focusId ? -1 : y === focusId ? 1 : 0;
